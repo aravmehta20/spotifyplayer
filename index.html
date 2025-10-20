@@ -10,40 +10,7 @@
   <button id="playBtn">Play Playlist</button>
 
   <script>
-    const token = Code
-JS
-JavaScript
-// Authorization token that must have been created previously. See : https://developer.spotify.com/documentation/web-api/concepts/authorization
-const token = 'BQA_uFpyVPT5xPJ543VAHn13J1qOSaYe-Gj-yrubosipGpDzyms2oU-CMD4VyB0dSbEXrlNtyf6Pc1jlqm5-wiLPfnUZLnIYhV5kSK2zcKlVMdEikK6n_ks9ne-EPg2-Hp1x8kVXI-Tpy1lw_VqvaBYGRydIevGBN6awJNzY1HoR4LSq8_EnYBBYsUTV00Vr9zCHcq9_T1kEvQUa6fqOjF8uJZDZTNPXAhKWjSPe9HPj1lJoWW-VpwcGeDN11e8sVnxOptCykpMaqfL5YSg6s9PfoUB9Ha6XwtgLHGDY_mbeOTzPXoJxoHl27pSqqBnc2mF_F1_o';
-async function fetchWebApi(endpoint, method, body) {
-  const res = await fetch(`https://api.spotify.com/${endpoint}`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-    method,
-    body:JSON.stringify(body)
-  });
-  return await res.json();
-}
-
-async function getTopTracks(){
-  // Endpoint reference : https://developer.spotify.com/documentation/web-api/reference/get-users-top-artists-and-tracks
-  return (await fetchWebApi(
-    'v1/me/top/tracks?time_range=long_term&limit=5', 'GET'
-  )).items;
-}
-
-const topTracks = await getTopTracks();
-console.log(
-  topTracks?.map(
-    ({name, artists}) =>
-      `${name} by ${artists.map(artist => artist.name).join(', ')}`
-  )
-);
-Result
-Step 1:
-Get your top 5 tracks
-; // manually copy from Spotify Console
+    const token = 'BQA_uFpyVPT5xPJ543VAHn13J1qOSaYe-Gj-yrubosipGpDzyms2oU-CMD4VyB0dSbEXrlNtyf6Pc1jlqm5-wiLPfnUZLnIYhV5kSK2zcKlVMdEikK6n_ks9ne-EPg2-Hp1x8kVXI-Tpy1lw_VqvaBYGRydIevGBN6awJNzY1HoR4LSq8_EnYBBYsUTV00Vr9zCHcq9_T1kEvQUa6fqOjF8uJZDZTNPXAhKWjSPe9HPj1lJoWW-VpwcGeDN11e8sVnxOptCykpMaqfL5YSg6s9PfoUB9Ha6XwtgLHGDY_mbeOTzPXoJxoHl27pSqqBnc2mF_F1_o';
     let deviceId;
 
     window.onSpotifyWebPlaybackSDKReady = () => {
