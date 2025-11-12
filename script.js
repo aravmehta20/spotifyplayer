@@ -55,8 +55,16 @@ async function callSpotify(endpoint, method = "PUT", body = {}) {
     body: Object.keys(body).length ? JSON.stringify(body) : undefined
   });
 }
+let playing = false;
+document.getElementById("play").onclick = async () => {
+  if (playing) {
+    await callSpotify("pause", "PUT");
+  } else {
+    await callSpotify("play", "PUT");
+  }
+  playing = !playing;
+};
 
-document.getElementById("play").onclick  = () => callSpotify("play");
 document.getElementById("prev").onclick  = () => callSpotify("previous", "POST");
 document.getElementById("next").onclick  = () => callSpotify("next", "POST");
 
