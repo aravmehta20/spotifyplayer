@@ -45,26 +45,15 @@ window.onSpotifyWebPlaybackSDKReady = () => {
 };
 
 // --- CONTROL PLAYBACK ---
-async function callSpotify(endpoint, method = "PUT", body = {}) {
-  return await fetch(`https://api.spotify.com/v1/me/player/${endpoint}?device_id=${deviceId}`, {
-    method,
-    headers: {
-      "Authorization": `Bearer ${accessToken}`,
-      "Content-Type": "application/json"
-    },
-    body: Object.keys(body).length ? JSON.stringify(body) : undefined
-  });
-}
-
-document.getElementById("play").onclick = () => callSpotify("play");
 document.getElementById("prev").onclick = () => callSpotify("previous", "POST");
 document.getElementById("next").onclick = () => callSpotify("next", "POST");
 
-// --- AUTO PLAY A PLAYLIST ON LOAD (OPTIONAL) ---
-async function playDefaultPlaylist() {
-  const playlistUri = "spotify:playlist:YOUR_PLAYLIST_ID"; // insert playlist ID here
+// use SDK's built-in play/pause toggle
+const playBtn = document.getElementById("play");
 
-  await callSpotify("play", "PUT", {
-    context_uri: playlistUri
-  });
-}
+player.addListener("player_state_changed", (s) => {
+  if (!s) return;
+  playBtn.textContent = s.paused ? "▶️" : "⏸️";
+});
+
+playBtn.onclick = () => player.togglePlay();
