@@ -66,3 +66,22 @@ async function callSpotify(endpoint, method = "PUT", body = {}) {
 document.getElementById("submitPlaylistID").addEventListener("click", () => {
     playPlaylist();
 });
+
+async function getCurrentTrack() {
+  const res = await fetch("https://api.spotify.com/v1/me/player/currently-playing", {
+    headers: { "Authorization": `Bearer ${accessToken}` }
+  });
+
+  if (res.status === 204 || res.status > 400) {
+    console.log("No song currently playing");
+    return;
+  }
+
+  const data = await res.json();
+  const track = data.item;
+  const trackName = track.name;
+  const artistName = track.artists.map(a => a.name).join(", ");
+
+  console.log(`Now playing: ${trackName} — ${artistName}`);
+  document.getElementById("currentTrack").innerText = `${trackName} — ${artistName}`;
+}
