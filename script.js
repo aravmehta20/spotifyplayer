@@ -51,7 +51,7 @@ async function callSpotify(endpoint, method = "PUT", body = {}) {
     },
     body: Object.keys(body).length ? JSON.stringify(body) : undefined
   });
-}
+} 
 document.getElementById("submitPlaylistID").addEventListener("click", () => {
     playPlaylist();
 });
