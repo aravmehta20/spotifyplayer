@@ -85,3 +85,6 @@ async function getCurrentTrack() {
   console.log(`Now playing: ${trackName} — ${artistName}`);
   document.getElementById("currentTrack").innerText = `${trackName} — ${artistName}`;
 }
+
+setInterval(getCurrentTrack, 5000); // every 5 seconds
+
