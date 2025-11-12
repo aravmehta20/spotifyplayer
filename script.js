@@ -55,7 +55,8 @@ async function callSpotify(endpoint, method = "PUT", body = {}) {
 
 
 // --- OPTIONAL: start a specific playlist ---
-// async function playDefaultPlaylist() {
-//   const playlistUri = "spotify:playlist:YOUR_PLAYLIST_ID";
-//   await callSpotify("play", "PUT", { context_uri: playlistUri });
-// }
+let playlistID = document.getElementByID("userInput");
+ async function playDefaultPlaylist() {
+   const playlistUri = "spotify:playlist:"+playlistID;
+  await callSpotify("play", "PUT", { context_uri: playlistUri });
+ }
