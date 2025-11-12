@@ -1,45 +1,70 @@
+// --- CONFIG ---
+const serverUrl = "https://spotify-auth-server-gamma.vercel.app";
+
+// --- TOKEN HANDLING ---
 const params = new URLSearchParams(window.location.search);
-const access_token = params.get('access_token');
-const refresh_token = params.get('refresh_token');
-const serverUrl = 'https://spotify-auth-server-gamma.vercel.app';
+let accessToken = params.get("access_token");
+const refreshToken = params.get("refresh_token");
 
-const loginBtn = document.getElementById('login');
-const playerDiv = document.getElementById('player');
-
-if (!access_token) {
-  loginBtn.onclick = () => {
+// --- LOGIN BUTTON ---
+if (!accessToken) {
+  document.getElementById("login").onclick = () => {
     window.location.href = `${serverUrl}/api/login`;
   };
-} else {
-  loginBtn.style.display = 'none';
-  playerDiv.style.display = 'block';
+}
 
-  async function controlPlayback(action) {
-    const endpoints = {
-      play: 'https://api.spotify.com/v1/me/player/play',
-      pause: 'https://api.spotify.com/v1/me/player/pause',
-      next: 'https://api.spotify.com/v1/me/player/next',
-      prev: 'https://api.spotify.com/v1/me/player/previous',
-    };
+// --- DEVICE + PLAYER ---
+let player;
+let deviceId = null;
 
-    try {
-      await fetch(endpoints[action], {
-        method: 'POST',
-        headers: { 'Authorization': `Bearer ${access_token}` },
-      });
-    } catch (err) {
-      console.error('Playback control error:', err);
-    }
-  }
+window.onSpotifyWebPlaybackSDKReady = () => {
+  if (!accessToken) return;
 
-  document.getElementById('play').onclick = async () => {
-    const currentState = await fetch('https://api.spotify.com/v1/me/player', {
-      headers: { 'Authorization': `Bearer ${access_token}` }
-    }).then(r => r.json());
-    if (currentState.is_playing) controlPlayback('pause');
-    else controlPlayback('play');
-  };
+  player = new Spotify.Player({
+    name: "My Web Player",
+    getOAuthToken: cb => cb(accessToken),
+    volume: 0.7
+  });
 
-  document.getElementById('next').onclick = () => controlPlayback('next');
-  document.getElementById('prev').onclick = () => controlPlayback('prev');
+  // When the player is ready
+  player.addListener("ready", ({ device_id }) => {
+    deviceId = device_id;
+    console.log("Spotify Web Player Ready:", device_id);
+
+    document.getElementById("login").style.display = "none";
+    document.getElementById("player").style.display = "block";
+  });
+
+  // Errors
+  player.addListener("initialization_error", ({ message }) => console.error(message));
+  player.addListener("authentication_error", ({ message }) => console.error(message));
+  player.addListener("account_error", ({ message }) => console.error(message));
+  player.addListener("playback_error", ({ message }) => console.error(message));
+
+  player.connect();
+};
+
+// --- CONTROL PLAYBACK ---
+async function callSpotify(endpoint, method = "PUT", body = {}) {
+  return await fetch(`https://api.spotify.com/v1/me/player/${endpoint}?device_id=${deviceId}`, {
+    method,
+    headers: {
+      "Authorization": `Bearer ${accessToken}`,
+      "Content-Type": "application/json"
+    },
+    body: Object.keys(body).length ? JSON.stringify(body) : undefined
+  });
+}
+
+document.getElementById("play").onclick = () => callSpotify("play");
+document.getElementById("prev").onclick = () => callSpotify("previous", "POST");
+document.getElementById("next").onclick = () => callSpotify("next", "POST");
+
+// --- AUTO PLAY A PLAYLIST ON LOAD (OPTIONAL) ---
+async function playDefaultPlaylist() {
+  const playlistUri = "spotify:playlist:YOUR_PLAYLIST_ID"; // insert playlist ID here
+
+  await callSpotify("play", "PUT", {
+    context_uri: playlistUri
+  });
 }
