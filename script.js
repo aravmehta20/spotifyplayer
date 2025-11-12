@@ -54,7 +54,7 @@ async function callSpotify(endpoint, method = "PUT", body = {}) {
 }
 document.getElementById("submitPlaylistID").addEventListener("click", () => {
     playPlaylist();
-  )};
+});
 
 // --- OPTIONAL: start a specific playlist ---
 
