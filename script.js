@@ -59,6 +59,7 @@ async function callSpotify(endpoint, method = "PUT", body = {}) {
  async function playPlaylist() {
    const playlistID = document.getElementById("userInput").value.replace(/\D/g, ""); 
    const playlistUri = "spotify:playlist:"+playlistID;
+   console.log("playlistUri:", playlistUri);
   await callSpotify("play", "PUT", { context_uri: playlistUri });
  }
 
