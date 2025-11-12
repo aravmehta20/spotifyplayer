@@ -52,11 +52,13 @@ async function callSpotify(endpoint, method = "PUT", body = {}) {
     body: Object.keys(body).length ? JSON.stringify(body) : undefined
   });
 }
-
+document.getElementById("submitPlaylistID").addEventListener("click", () => {
+    playPlaylist();
+  )};
 
 // --- OPTIONAL: start a specific playlist ---
-let playlistID = document.getElementByID("userInput");
- async function playDefaultPlaylist() {
+let playlistID = document.getElementByID("userInput").replace(/\D/g, ""); 
+ async function playPlaylist() {
    const playlistUri = "spotify:playlist:"+playlistID;
   await callSpotify("play", "PUT", { context_uri: playlistUri });
  }
