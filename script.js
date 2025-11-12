@@ -24,6 +24,7 @@ window.onSpotifyWebPlaybackSDKReady = () => {
     name: "My Web Player",
     getOAuthToken: cb => cb(accessToken),
     volume: 0.7
+    enableMediaSession: true
   });
 
   // When the player is ready
@@ -55,15 +56,17 @@ async function callSpotify(endpoint, method = "PUT", body = {}) {
     body: Object.keys(body).length ? JSON.stringify(body) : undefined
   });
 }
-let playing = false;
-document.getElementById("play").onclick = async () => {
-  if (playing) {
-    await callSpotify("pause", "PUT");
-  } else {
-    await callSpotify("play", "PUT");
-  }
-  playing = !playing;
-};
+if ('mediaSession' in navigator) {
+  // optional: show track info in OS media UI
+  // navigator.mediaSession.metadata = new MediaMetadata({ title: '...', artist: '...', artwork: [{src:'...'}] });
+
+  navigator.mediaSession.setActionHandler('play', async () => {
+    try { await player.resume(); } catch { /* fallback if you want */ }
+  });
+
+  navigator.mediaSession.setActionHandler('pause', async () => {
+    try { await player.pause(); } catch { /* fallback if you want */ }
+  });
 
 document.getElementById("prev").onclick  = () => callSpotify("previous", "POST");
 document.getElementById("next").onclick  = () => callSpotify("next", "POST");
