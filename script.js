@@ -55,18 +55,8 @@ async function callSpotify(endpoint, method = "PUT", body = {}) {
     body: Object.keys(body).length ? JSON.stringify(body) : undefined
   });
 }
-if ('mediaSession' in navigator) {
-  // optional: show track info in OS media UI
-  // navigator.mediaSession.metadata = new MediaMetadata({ title: '...', artist: '...', artwork: [{src:'...'}] });
-
-  navigator.mediaSession.setActionHandler('play', async () => {
-    try { await player.resume(); } catch { /* fallback if you want */ }
-  });
-
-  navigator.mediaSession.setActionHandler('pause', async () => {
-    try { await player.pause(); } catch { /* fallback if you want */ }
-  });
-
+document.getElementById("pause").onclick  = () => callSpotify("pause", "POST");
+document.getElementById("play").onclick  = () => callSpotify("play", "POST");
 document.getElementById("prev").onclick  = () => callSpotify("previous", "POST");
 document.getElementById("next").onclick  = () => callSpotify("next", "POST");
 
