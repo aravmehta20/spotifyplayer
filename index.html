@@ -1,21 +1,23 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>My Spotify Player</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
+  <!-- Load the SDK ONCE -->
+  <script src="https://sdk.scdn.co/spotify-player.js"></script>
+  <!-- Load your app script AFTER; defer so DOM is ready -->
   <script defer src="script.js"></script>
 </head>
-  <script src="https://sdk.scdn.co/spotify-player.js"></script>
 <body>
   <h1>🎵 My Spotify Player</h1>
-  <button id="login">Login with Spotify</button>
 
-  <div id="player" style="display:none;">
-    <button id="prev">⏮️</button>
-    <button id="play">⏯️</button>
-    <button id="next">⏭️</button>
+  <button id="login" type="button">Login with Spotify</button>
+
+  <div id="player" style="display:none; margin-top:16px;">
+    <button id="prev"  type="button">⏮️</button>
+    <button id="play"  type="button">▶️</button>
+    <button id="next"  type="button">⏭️</button>
   </div>
-
 </body>
 </html>
