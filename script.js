@@ -57,8 +57,9 @@ document.getElementById("submitPlaylistID").addEventListener("click", () => {
   )};
 
 // --- OPTIONAL: start a specific playlist ---
-let playlistID = document.getElementByID("userInput").replace(/\D/g, ""); 
+
  async function playPlaylist() {
+   const playlistID = document.getElementById("userInput").value.replace(/\D/g, ""); 
    const playlistUri = "spotify:playlist:"+playlistID;
   await callSpotify("play", "PUT", { context_uri: playlistUri });
  }
