@@ -24,7 +24,6 @@ window.onSpotifyWebPlaybackSDKReady = () => {
     name: "My Web Player",
     getOAuthToken: cb => cb(accessToken),
     volume: 0.7
-    enableMediaSession: true
   });
 
   // When the player is ready
